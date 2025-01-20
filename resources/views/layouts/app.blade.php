@@ -53,7 +53,7 @@
     <!-- /.navbar -->
 
     <!-- Main Sidebar Container -->
-    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: #eff0f2">
         <!-- Brand Logo -->
         @php
             use App\Models\SchoolDetails;
@@ -62,7 +62,7 @@
 
         <a href="/" class="brand-link">
             @foreach ($logo as $schools)    
-            <img src="{{ asset('storage/' . $schools->logo) }}" alt="School Logo" style="max-width: 230px;">
+            <img src="{{ asset('storage/' . $schools->logo) }}" alt="School Logo" style="max-width: 208px;">
             @endforeach
             {{-- <span class="brand-text font-weight-light">AdminLTE 3</span> --}}
         </a>
@@ -90,10 +90,10 @@
     <footer class="main-footer">
         <!-- To the right -->
         <div class="float-right d-none d-sm-inline">
-            Anything you want
+            
         </div>
         <!-- Default to the left -->
-        <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; <a href="https://geetanjalischoolcollege.edu.np" target="_blank">Geetanjali School College</a>.</strong> All rights reserved.
     </footer>
 </div>
 <!-- ./wrapper -->
@@ -107,3 +107,29 @@
 @yield('scripts')
 </body>
 </html>
+
+<script>
+    function previewImage(event) {
+        const fileInput = event.target;
+        const preview = document.getElementById('preview');
+        const currentLogo = document.getElementById('current-logo');
+
+        // Check if a file is selected
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+
+            // Display the new file as a preview
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block'; // Show the preview image
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+
+            // Optionally hide the current logo when previewing a new one
+            if (currentLogo) {
+                currentLogo.style.display = 'none';
+            }
+        }
+    }
+</script>

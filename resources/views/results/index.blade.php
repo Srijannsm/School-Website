@@ -6,16 +6,17 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">{{ __('Users') }}</h1>
-                </div>
+                    <h1 class="m-0">{{ __('Results') }}</h1>
+                </div><!-- /.col -->
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('users.create') }}" class="btn btn-primary">
-                        {{ __('Add User') }}
+                    <a href="{{ route('results.create') }}" class="btn btn-primary">
+                        {{ __('Add Results') }}
                     </a>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
     </div>
+
     <!-- /.content-header -->
 
     <!-- Main content -->
@@ -29,23 +30,33 @@
                         </div> --}}
                         <!-- /.card-header -->
                         <div class="card-body">
-                            @if ($users->isEmpty())
-                                <p>No User added yet.</p>
+                            @if ($results->isEmpty())
+                                <p>No results added yet.</p>
                             @else
                                 <table class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Name</th>
-                                            <th scope="col">Email</th>
+                                            <th scope="col" style="width: 70%;">Result</th>
+                                            {{-- <th scope="col">File</th> --}}
+                                            <th scope="col" >Action</th>
                                         </tr>
                                     </thead>
-                                    @foreach ($users as $user)
+                                    @foreach ($results as $result)
                                         <tbody>
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
-                                                <td>{{ $user->name }}</td>
-                                                <td>{{ $user->email }}</td>
+                                                <td style="font-weight: bold; color:red">{{ $result->title }}</td>
+                                                {{-- <td>{{ $result->file_path }}</td> --}}
+                                                <td>
+                                                    <a href="{{ route('results.download', ['id' => $result->id]) }}" class="btn btn-primary">Download</a>
+                                                    <a href="{{ route('results.edit', ['id' => $result->id]) }}"
+                                                        class="btn btn-success pull-right" role="button">Edit
+                                                    </a>
+                                                    <a href="{{ route('results.destroy', ['id' => $result->id]) }}"
+                                                        class="btn btn-danger pull-right" role="button">Remove
+                                                    </a>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     @endforeach
