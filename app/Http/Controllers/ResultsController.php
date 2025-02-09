@@ -87,7 +87,7 @@ class ResultsController extends Controller
     
             // Store new file
             $file = $request->file('file');
-            $filePath = $file->store('resultss', 'public');
+            $filePath = $file->store('results', 'public');
             $results->file_path = $filePath;
         }
     

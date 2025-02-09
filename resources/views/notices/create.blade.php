@@ -22,11 +22,11 @@
                 <div class="col-lg-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Create news</h3>
+                            <h3 class="card-title">Create notices</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('news.store') }}" method="POST">
+                        <form action="{{ route('notices.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group">
@@ -35,9 +35,10 @@
                                         placeholder="Enter Title" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">Description:</label>
-                                    <input type="text" class="form-control" id="description" name="description"
-                                        placeholder="Enter Description" required>
+                                    {{-- <label for="name">Description:</label> --}}
+                                    <label for="file">Upload Notice (PDF):</label>
+                                    <input type="file" id="file" name="file" required>
+                                    {{-- <input type="file" name="file" id="file" required> --}}
                                 </div>
                             </div>
                             <!-- /.card-body -->

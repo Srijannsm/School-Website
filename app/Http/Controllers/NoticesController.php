@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Notices;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class NoticesController extends Controller
 {
     // Display a listing of the academic details.
     public function index()
     {
+        // dd('ok');
         $notices = Notices::all();
         // dd($notices);
         return view('notices.index', compact('notices'));
@@ -24,67 +26,102 @@ class NoticesController extends Controller
     // Store a newly created academic detail in the database.
     public function store(Request $request)
     {
-        // Strong validation rules
-        $validatedData = $request->validate([
+        // Validate the input
+        $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'file' => 'required|mimes:pdf|max:2048', // file is required
         ]);
 
+        // Handle the uploaded file
+        $file = $request->file('file');
+        $filePath = $file->store('notices', 'public'); // Store file and get its path
 
-        // Create the new academic detail record
+        // dd($filePath);  // Debug the file path to check if it's correct
+
         Notices::create([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
+            'title' => $request->title,
+            'file_path' => $filePath,  // Store the file path in the database
         ]);
 
-        return redirect()->route('notices.store')->with('success', 'Notice details created successfully.');
+        // Redirect with a success message
+        return redirect()->route('notices.index')->with('success', 'Notices detail added successfully.');
     }
 
-    // Display the specified academic detail.
-    // public function show($id)
-    // {
-    //     $academic = Notice::findOrFail($id);
-    //     return view('academic_details.show', compact('academic'));
-    // }
 
-    // Show the form for editing the specified academic detail.
-    public function edit($id)
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
     {
-        $notices = Notices::find($id);  // Fetch the academic based on the provided ID
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        $notices = Notices::find($id);
         return view('notices.edit', compact('notices'));
     }
-    
 
-    // Update the specified academic detail in the database.
-    public function update(Request $request, $id)
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
     {
-        // Strong validation rules for updating
-        $validatedData = $request->validate([
+        $notices = Notices::find($id);
+        $request->validate([
             'title' => 'required|string|max:255',
-            'description' => 'required|string|max:255',
+            'file' => 'nullable|mimes:pdf|max:2048',
         ]);
-
-        // Find the academic detail to update
-        $academic = Notices::findOrFail($id);
-
-
-        // Update the academic details
-        $academic->update([
-            'title' => $validatedData['title'],
-            'description' => $validatedData['description'],
-        ]);
-
-        return redirect()->route('notices.index')->with('success', 'New details updated successfully.');
+    
+        if ($request->hasFile('file')) {
+            // Delete old file
+            Storage::disk('public')->delete($notices->file_path);
+    
+            // Store new file
+            $file = $request->file('file');
+            $filePath = $file->store('notices', 'public');
+            $notices->file_path = $filePath;
+        }
+    
+        // Update title
+        $notices->title = $request->title;
+        $notices->save();
+    
+        return redirect()->route('notices.index')->with('success', 'Notice updated successfully.');
     }
 
-    // Remove the specified academic detail from the database.
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
-        $academic = Notices::findOrFail($id);
+        $file = Notices::findOrFail($id);
 
-        // Delete the academic record
-        $academic->delete();
+        // Delete the file record
+        $file->delete();
 
-        return redirect()->route('notices.index')->with('success', 'New details deleted successfully.');
+        return redirect()->route('notices.index')->with('success', 'file details deleted successfully.');
+    }
+
+
+    public function download($id)
+    {
+        $result = Notices::find($id);
+
+        // Check if the result exists
+        if (!$result) {
+            return response()->json(['error' => 'Notice not found.'], 404);
+        }
+
+        // Proceed with download if file exists
+        if (!$result->file_path || !Storage::disk('public')->exists($result->file_path)) {
+            return response()->json(['error' => 'File not found.'], 404);
+        }
+
+        return Storage::disk('public')->download($result->file_path, $result->title . '.pdf');
     }
 }

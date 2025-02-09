@@ -30,27 +30,30 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        // dd('ok');
-        // dd($request);
-        // Validate the input: Ensure that 'image' is required
-        $request->validate([
-            'title' => 'required|string|max:255',  // Ensure title is provided
-            'image' => 'required|image|mimes:jpg,jpeg,png,gif',  // Image is required
+        // Validate the request
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'images' => 'required',
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
         ]);
-
-        // Handle the image file upload (since it's required)
-        $imagePath = $request->file('image')->store('images', 'public'); // Store the image and get the path
-
-        // dd($imagePath);
-        // Create the new gallery item record
+    
+        $imagePaths = [];
+    
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $image) {
+                $imagePaths[] = $image->store('images', 'public');
+            }
+        }
+    
+        // Save academic details
         Gallery::create([
-            'title' => $request->title,  // Store the title
-            'image' => $imagePath,  // Store the image path
+            'title' => $validatedData['title'],
+            'image' => json_encode($imagePaths), // Store multiple images as JSON
         ]);
-
-        // Redirect with a success message
-        return redirect()->route('gallery.index')->with('success', 'Gallery item created successfully.');
+    
+        return redirect()->route('gallery.index')->with('success', 'Academics details created successfully.');
     }
+    
 
 
 

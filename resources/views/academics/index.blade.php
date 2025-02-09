@@ -39,6 +39,7 @@
                                             <th scope="col">#</th>
                                             <th scope="col">Title</th>
                                             <th scope="col">Description</th>
+                                            <th scope="col">Image</th>
                                             <th scope="col">Action</th>
                                         </tr>
                                     </thead>
@@ -47,7 +48,14 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $academic->title }}</td>
-                                                <td>{{ $academic->description }}</td>
+                                                <td>{!!  $academic->description !!}</td>
+                                                <td>
+                                                    @if($academic->image)
+                                                        <img src="{{ asset('storage/' . $academic->image) }}" alt="Image" class="img-thumbnail" width="100">
+                                                    @else
+                                                        <p>No Image</p>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <a href="{{ route('academics.edit', ['id' => $academic->id]) }}"
                                                         class="btn btn-success pull-right" role="button">Edit

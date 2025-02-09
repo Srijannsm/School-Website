@@ -23,7 +23,7 @@ use App\Http\Controllers\SchoolDetailsController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('auth/login');
 });
 
 Auth::routes();
@@ -80,6 +80,7 @@ Route::middleware('auth')->group(function () {
     Route::get('notices/{id}/edit', [NoticesController::class, 'edit'])->name('notices.edit');
     Route::put('notices/{id}/update', [NoticesController::class, 'update'])->name('notices.update');
     Route::get('notices/{id}', [NoticesController::class, 'destroy'])->name('notices.destroy');
+    Route::get('notices/{id}/download', [NoticesController::class, 'download'])->name('notices.download');
 
     //results
     Route::get('results', [ResultsController::class, 'index'])->name('results.index');

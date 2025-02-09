@@ -21,7 +21,7 @@ class Notices extends Model
     // The attributes that are mass assignable.
     protected $fillable = [
         'title',
-        'description',
+        'file_path',
         
     ];
 }

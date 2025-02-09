@@ -33,13 +33,6 @@
                     <p>{{ __('Academics') }}</p>
                 </a>
             </li>
-            <!-- News and Notices Link -->
-            <li class="nav-item">
-                <a href="{{ route('news.index') }}" class="nav-link sidebar-link">
-                    <i class="nav-icon fas fa-newspaper"></i>
-                    <p>{{ __('News') }}</p>
-                </a>
-            </li>
             
             <!-- Gallery Link -->
             <li class="nav-item">
@@ -64,7 +57,15 @@
                     <p>{{ __('Users') }}</p>
                 </a>
             </li>
-            <!-- News and Notices Link -->
+
+            <!-- News Link -->
+            <li class="nav-item">
+                <a href="{{ route('news.index') }}" class="nav-link sidebar-link">
+                    <i class="nav-icon fas fa-newspaper"></i>
+                    <p>{{ __('News') }}</p>
+                </a>
+            </li>
+            <!--Notices Link -->
             <li class="nav-item">
                 <a href="{{ route('notices.index') }}" class="nav-link sidebar-link">
                     <i class="nav-icon fas fa-circle-exclamation"></i>
@@ -72,16 +73,16 @@
                 </a>
             </li>
 
-            {{-- <!-- Settings Link -->
+            <!-- Settings Link -->
             <li class="nav-item">
                 <a href="{{ route('school_details.index') }}" class="nav-link sidebar-link">
                     <i class="nav-icon fas fa-solid fa-gear"></i>
-                    <p>{{ __('Setting') }}</p>
+                    <p>{{ __('School Setting') }}</p>
                 </a>
-            </li> --}}
+            </li>
 
             <!-- Two-level Menu -->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a href="#" class="nav-link sidebar-link">
                     <i class="nav-icon fas fa-solid fa-gear"></i>
                     <p>
@@ -105,7 +106,7 @@
                         </a>
                     </li>
                 </ul>
-            </li>
+            </li> --}}
         </ul>
     </nav>
     <!-- /.sidebar-menu -->

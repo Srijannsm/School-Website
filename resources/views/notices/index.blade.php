@@ -6,11 +6,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">{{ __('News') }}</h1>
+                    <h1 class="m-0">{{ __('Notices') }}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('notices.create') }}" class="btn btn-primary">
-                        {{ __('Create News') }}
+                        {{ __('Create Notice') }}
                     </a>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -37,18 +37,19 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col" style="width: 70%;">Title</th>
+                                        {{-- <th scope="col">File</th> --}}
+                                        <th scope="col" >Action</th>
                                     </tr>
                                 </thead>
                                 @foreach ($notices as $notice)
                                     <tbody>
                                         <tr>
                                             <th scope="row">{{ $loop->iteration }}</th>
-                                            <td>{{ $notice->title }}</td>
-                                            <td>{{ $notice->description }}</td>
+                                            <td style="font-weight: bold; color:rgba(69, 13, 238, 0.727)">{{ $notice->title }}</td>
+                                            {{-- <td>{{ $notice->file_path }}</td> --}}
                                             <td>
+                                                <a href="{{ route('notices.download', ['id' => $notice->id]) }}" class="btn btn-primary">Download</a>
                                                 <a href="{{ route('notices.edit', ['id' => $notice->id]) }}"
                                                     class="btn btn-success pull-right" role="button">Edit
                                                 </a>
@@ -58,7 +59,7 @@
                                             </td>
                                         </tr>
                                     </tbody>
-                                @endforeach 
+                                @endforeach
                             </table>
                             @endif
                         </div>

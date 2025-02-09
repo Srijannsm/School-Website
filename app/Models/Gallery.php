@@ -27,6 +27,9 @@ class Gallery extends Model
         'messages_id',
 
     ];
+    protected $casts = [
+        'image' => 'array', // Automatically convert JSON to array
+    ];
     public function photos()
     {
         return $this->hasMany(Gallery::class, 'news_id');
