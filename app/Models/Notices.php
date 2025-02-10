@@ -24,4 +24,15 @@ class Notices extends Model
         'file_path',
         
     ];
+
+    // Optionally, you can cast the created_at and updated_at fields to a specific format
+    public function getCreatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('m/d/Y');
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('m/d/Y');
+    }
 }

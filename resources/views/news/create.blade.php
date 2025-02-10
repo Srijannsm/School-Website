@@ -25,8 +25,22 @@
                             <h3 class="card-title">Create news</h3>
                         </div>
                         <!-- /.card-header -->
+                        <!-- Display validation errors as pop-ups -->
+                        @if ($errors->any())
+                            <script>
+                                document.addEventListener("DOMContentLoaded", function() {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Validation Errors',
+                                        html: `{!! implode('<br>', $errors->all()) !!}`,
+                                        confirmButtonColor: '#d33',
+                                        confirmButtonText: 'OK'
+                                    });
+                                });
+                            </script>
+                        @endif
                         <!-- form start -->
-                        <form action="{{ route('news.store') }}" method="POST">
+                        <form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
                                 <div class="form-group">
@@ -35,7 +49,22 @@
                                         placeholder="Enter Title" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="name">Description:</label>
+                                    <label for="image">Image:</label>
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="image" name="image"
+                                                accept="image/*" onchange="previewImage(event)">
+                                            <label class="custom-file-label" for="image">Choose file</label>
+                                        </div>
+                                    </div>
+                                    <!-- Image preview section -->
+                                    <div class="mt-2">
+                                        <img id="preview" src="#" alt="Image Preview"
+                                            style="display: none; max-width: 150px;">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Description</label>
                                     <textarea class="form-control editor" name="description"></textarea>
                                 </div>
                             </div>
