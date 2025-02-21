@@ -9,15 +9,25 @@ use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
-    // Display a listing of the academic details.
+    // Display a listing of the news details.
     public function index()
     {
-        // dd('ok');
         $news = News::all();
-        // dd($academicDetails);
-        return response()->json($news);
+
+        // Modify the news data to prepend the base URL to image/file paths
+        $newsWithUrl = $news->map(function ($newsItem) {
+            // Assuming 'image' is the field in the News model
+            if ($newsItem->image) {
+                $newsItem->image = asset('storage/' . $newsItem->image);
+            }
+
+            // You can add similar transformations for other file fields if required
+
+            return $newsItem;
+        });
+
+        return response()->json($newsWithUrl);
     }
 
-    // Show the form for creating a new academic detail.
-    
+    // Other methods...
 }

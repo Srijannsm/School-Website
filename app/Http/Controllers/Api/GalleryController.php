@@ -12,11 +12,31 @@ class GalleryController extends Controller
     // Display a listing of the academic details.
     public function index()
     {
+        // Retrieve all the images
         $images = Gallery::all();
-        // dd($academicDetails);
-        return response()->json($images);
+
+        // Prepare the response with full URLs for the images
+        $imagesWithUrl = $images->map(function ($image) {
+            // Decode the JSON array of image paths
+            $imagePaths = json_decode($image->image);
+
+            // Prepend base URL to each image path
+            $imagePathsWithUrl = array_map(function ($path) {
+                return asset('storage/' . $path); // Prepend base URL to each image path
+            }, $imagePaths);
+
+            // Return the image paths with URLs
+            return [
+                'id' => $image->id,
+                'title' => $image->title,
+                'images' => $imagePathsWithUrl,
+            ];
+        });
+
+        // Return the response as JSON
+        return response()->json($imagesWithUrl);
     }
 
-    // Show the form for creating a new academic detail.
-    
+    // Other methods...
 }
+

@@ -34,7 +34,7 @@ class GalleryController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
             'images' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif'
         ]);
     
         $imagePaths = [];
