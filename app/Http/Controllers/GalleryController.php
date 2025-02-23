@@ -30,30 +30,32 @@ class GalleryController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate the request
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'images' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif'
-        ]);
-    
-        $imagePaths = [];
-    
+        \Log::info($request->all()); // Debugging: Log incoming request
+
         if ($request->hasFile('images')) {
+            $imagePaths = [];
+
             foreach ($request->file('images') as $image) {
+                // Save each image in the storage folder
                 $imagePaths[] = $image->store('images', 'public');
             }
+
+            // Save to database
+            $gallery = Gallery::create([
+                'title' => $request->title ?? 'Untitled',
+                'image' => json_encode($imagePaths), // Store multiple image paths as JSON
+            ]);
+
+            return response()->json([
+                'success' => 'Images uploaded successfully!',
+                'redirect' => route('gallery.index') // Send redirect URL to frontend
+            ]);
+            // return response()->json(['success' => 'Images uploaded successfully!', 'gallery' => $gallery]);
         }
-    
-        // Save academic details
-        Gallery::create([
-            'title' => $validatedData['title'],
-            'image' => json_encode($imagePaths), // Store multiple images as JSON
-        ]);
-    
-        return redirect()->route('gallery.index')->with('success', 'Academics details created successfully.');
+
+        return response()->json(['error' => 'No images uploaded.'], 400);
     }
-    
+
 
 
 
@@ -86,11 +88,23 @@ class GalleryController extends Controller
      */
     public function destroy($id)
     {
+        // Find the gallery record
         $image = Gallery::findOrFail($id);
-
-        // Delete the image record
+    
+        // Decode the JSON to get the image paths
+        $imagePaths = json_decode($image->image);
+    
+        // Loop through each image path and delete the image file
+        foreach ($imagePaths as $imagePath) {
+            if (Storage::disk('public')->exists($imagePath)) {
+                Storage::disk('public')->delete($imagePath);
+            }
+        }
+    
+        // Delete the record from the database
         $image->delete();
-
-        return redirect()->route('gallery.index')->with('success', 'image details deleted successfully.');
+    
+        // Redirect back with success message
+        return redirect()->route('gallery.index')->with('success', 'Image details and files deleted successfully.');
     }
-}
+    }

@@ -17,100 +17,154 @@
         </div><!-- /.container-fluid -->
     </div>
 
-    <!-- /.content-header -->
-
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
-            <div class="card card-primary">
-                <div class="card-body">
-                    <div class="row">
+            <!-- Scrollable Gallery Section -->
+            <div class="gallery-scroll-container">
+                <div class="card card-primary">
+                    <div class="card-body">
                         @foreach ($images as $image)
                             @php
                                 $imagePaths = json_decode($image->image); // Decode the JSON array
                             @endphp
-                            @foreach ($imagePaths as $path)
-                                <div class="col-6 col-sm-4 col-md-3 col-lg-2 mb-4">
-                                    <!-- Image Link with Hover Effect -->
-                                    <a href="{{ asset('storage/' . $path) }}" data-toggle="lightbox"
-                                        data-title="sample 1 - white" data-gallery="gallery" class="d-block">
-                                        <div class="image-container">
-                                            <img src="{{ asset('storage/' . $path) }}" class="img-fluid img-thumbnail"
-                                                alt="image" />
-                                            <div class="image-title">{{ $image->title }}</div>
-                                        </div>
-                                    </a>
-
-                                    <!-- Remove Button -->
+                            <div class="image-section">
+                                <!-- Title and Remove Button -->
+                                <div class="image-title d-flex justify-content-between align-items-center">
+                                    <span>{{ $image->title }}</span>
                                     <a href="{{ route('gallery.destroy', ['id' => $image->id]) }}" 
-                                       class="btn btn-default mt-auto w-100">
+                                       class="btn btn-danger btn-sm">
                                         Remove
                                     </a>
                                 </div>
-                            @endforeach
+                                <!-- Scrollable Image Container -->
+                                <div class="image-scroll-container">
+                                    <div class="image-grid">
+                                        @foreach ($imagePaths as $path)
+                                            <div class="image-item">
+                                                <a href="{{ asset('storage/' . $path) }}" data-toggle="lightbox"
+                                                    data-title="sample 1 - white" data-gallery="gallery" class="d-block">
+                                                    <div class="image-container">
+                                                        <img src="{{ asset('storage/' . $path) }}" class="img-fluid img-thumbnail"
+                                                            alt="image" />
+                                                    </div>
+                                                </a>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
                         @endforeach
                     </div>
                 </div>
-            </div>
+            </div> <!-- End Scrollable Gallery Section -->
         </div><!-- /.container-fluid -->
     </div>
     <!-- /.content -->
 @endsection
 
-
-
 <style>
-/* Image container with hover effect */
+/* Prevent the page from expanding */
+.content {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+/* Scrollable gallery container */
+.gallery-scroll-container {
+    max-height: 600px; /* Adjust this height based on your layout */
+    overflow-y: auto; /* Enable scrolling for the entire section */
+    padding-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+}
+
+/* Image section styling */
+.image-section {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    overflow: hidden;
+    max-width: 100%;
+}
+
+/* Title and remove button */
+.image-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Scrollable image container */
+.image-scroll-container {
+    max-height: 250px; /* Limit height of individual image sections */
+    overflow-y: auto; /* Scroll within each section */
+    padding-right: 10px;
+}
+
+/* Image grid */
+.image-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: flex-start;
+    max-width: 100%;
+}
+
+/* Image item */
+.image-item {
+    width: calc(25% - 10px); /* 4 images per row */
+    max-width: 200px;
+    flex-grow: 1;
+}
+
+/* Image container styling */
 .image-container {
     position: relative;
-    overflow: hidden; /* Ensure that hover effect is contained */
-}
-
-/* Hide the title by default */
-.image-title {
-    position: absolute;
-    bottom: 10px;  
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5);  
-    color: #fff;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 5px;
-    text-align: center;
-    opacity: 0;  
-    transition: opacity 0.3s ease;  
-}
-
-/* Make the title visible on hover */
-.image-container:hover .image-title {
-    opacity: 1;  
+    overflow: hidden;
+    border-radius: 6px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
 }
 
 /* Image hover effect */
-.image-container:hover .img-thumbnail {
-    transform: scale(1.05);  
-    transition: transform 0.3s ease;
+.image-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Responsive grid for images */
-.row {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
+/* Ensure images are responsive */
+img {
+    max-width: 100%;
+    height: auto;
 }
 
-/* Ensuring the grid adjusts for different screen sizes */
-@media (max-width: 576px) {
-    .row {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));  
+/* Fix layout for small screens */
+@media (max-width: 992px) {
+    .image-item {
+        width: calc(33.33% - 10px); /* 3 images per row */
     }
 }
 
-/* Optional: If you want to limit the height of the container with overflow scroll */
-.card-body {
-    max-height: 500px;
-    overflow-y: auto;
+@media (max-width: 768px) {
+    .image-item {
+        width: calc(50% - 10px); /* 2 images per row */
+    }
 }
 
-    </style>
+@media (max-width: 576px) {
+    .image-item {
+        width: calc(100% - 10px); /* 1 image per row */
+    }
+}
+</style>
