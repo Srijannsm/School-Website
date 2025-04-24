@@ -4,8 +4,8 @@ Welcome to the official repository of the **Geetanjali School & College Website*
 
 ## 🌐 Live Site
 
-[Visit the Website](https://www.geetanjalischoolcollege.edu.np)  
-*(Replace this with your deployed site URL)*
+[Geetanjali School College](https://www.geetanjalischoolcollege.edu.np)  
+
 
 ## 📌 Features
 
