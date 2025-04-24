@@ -28,7 +28,7 @@ Welcome to the official repository of the **Geetanjali School & College Website*
 
 ### Prerequisites
 
-- Node.js / XAMPP / PHP server (depending on your stack)
+- Node.js / Laragon / PHP server 
 - Git
 
 ### Installation
