@@ -6,11 +6,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">{{ __(' School Settings') }}</h1>
+                    <h1 class="m-0">{{ __('Settings') }}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6 text-right">
                     <a href="{{ route('school_details.edit', ['id' => 1]) }}" class="btn btn-primary">
-                        {{ __('Edit School Details') }}
+                        {{ __('Edit Details') }}
                     </a>
                 </div><!-- /.col -->
             </div><!-- /.row -->

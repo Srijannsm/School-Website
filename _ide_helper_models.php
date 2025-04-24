@@ -38,6 +38,19 @@ namespace App\Models{
 /**
  * 
  *
+ * @property-read mixed $created_at
+ * @property-read mixed $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|Downloads newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Downloads newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Downloads query()
+ */
+	class Downloads extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
+ * 
+ *
  * @property int $id
  * @property string $title
  * @property array|null $image

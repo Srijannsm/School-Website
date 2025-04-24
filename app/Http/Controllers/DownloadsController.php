@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Notices;
+use App\Models\Downloads;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class NoticesController extends Controller
+class DownloadsController extends Controller
 {
     // Display a listing of the academic details.
     public function index()
     {
         // dd('ok');
-        $notices = Notices::all();
-        // dd($notices);
-        return view('notices.index', compact('notices'));
+        $downloads = Downloads::all();
+        // dd($downloads);
+        return view('downloads.index', compact('downloads'));
     }
 
     // Show the form for creating a new academic detail.
     public function create()
     {
-        return view('notices.create');
+        return view('downloads.create');
     }
 
     // Store a newly created academic detail in the database.
@@ -34,17 +34,17 @@ class NoticesController extends Controller
 
         // Handle the uploaded file
         $file = $request->file('file');
-        $filePath = $file->store('notices', 'public'); // Store file and get its path
+        $filePath = $file->store('downloads', 'public'); // Store file and get its path
 
         // dd($filePath);  // Debug the file path to check if it's correct
 
-        Notices::create([
+        Downloads::create([
             'title' => $request->title,
             'file_path' => $filePath,  // Store the file path in the database
         ]);
 
         // Redirect with a success message
-        return redirect()->route('notices.index')->with('success', 'Notices detail added successfully.');
+        return redirect()->route('downloads.index')->with('success', 'Downloads detail added successfully.');
     }
 
 
@@ -62,8 +62,8 @@ class NoticesController extends Controller
      */
     public function edit(string $id)
     {
-        $notices = Notices::find($id);
-        return view('notices.edit', compact('notices'));
+        $downloads = Downloads::find($id);
+        return view('downloads.edit', compact('downloads'));
     }
 
     /**
@@ -71,7 +71,7 @@ class NoticesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $notices = Notices::find($id);
+        $downloads = Downloads::find($id);
         $request->validate([
             'title' => 'required|string|max:255',
             'file' => 'nullable|mimes:pdf',
@@ -79,19 +79,19 @@ class NoticesController extends Controller
     
         if ($request->hasFile('file')) {
             // Delete old file
-            Storage::disk('public')->delete($notices->file_path);
+            Storage::disk('public')->delete($downloads->file_path);
     
             // Store new file
             $file = $request->file('file');
-            $filePath = $file->store('notices', 'public');
-            $notices->file_path = $filePath;
+            $filePath = $file->store('downloads', 'public');
+            $downloads->file_path = $filePath;
         }
     
         // Update title
-        $notices->title = $request->title;
-        $notices->save();
+        $downloads->title = $request->title;
+        $downloads->save();
     
-        return redirect()->route('notices.index')->with('success', 'Notice updated successfully.');
+        return redirect()->route('downloads.index')->with('success', 'Notice updated successfully.');
     }
 
     /**
@@ -99,18 +99,18 @@ class NoticesController extends Controller
      */
     public function destroy($id)
     {
-        $file = Notices::findOrFail($id);
+        $file = Downloads::findOrFail($id);
 
         // Delete the file record
         $file->delete();
 
-        return redirect()->route('notices.index')->with('success', 'file details deleted successfully.');
+        return redirect()->route('downloads.index')->with('success', 'file details deleted successfully.');
     }
 
 
     public function download($id)
     {
-        $result = Notices::find($id);
+        $result = Downloads::find($id);
 
         // Check if the result exists
         if (!$result) {

@@ -33,7 +33,7 @@ class ResultsController extends Controller
         // Validate the input
         $request->validate([
             'title' => 'required|string|max:255',
-            'file' => 'required|mimes:pdf|max:2048', // file is required
+            'file' => 'required|mimes:pdf', // file is required
         ]);
 
         // Handle the uploaded file
@@ -78,7 +78,7 @@ class ResultsController extends Controller
         $results = Results::find($id);
         $request->validate([
             'title' => 'required|string|max:255',
-            'file' => 'nullable|mimes:pdf|max:2048',
+            'file' => 'nullable|mimes:pdf',
         ]);
     
         if ($request->hasFile('file')) {

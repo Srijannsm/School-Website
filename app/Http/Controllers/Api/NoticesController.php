@@ -9,15 +9,24 @@ use Illuminate\Support\Facades\Storage;
 
 class NoticesController extends Controller
 {
-    // Display a listing of the academic details.
+    // Display a listing of the notices details.
     public function index()
     {
-        // dd('ok');
         $notices = Notices::all();
-        // dd($academicDetails);
-        return response()->json($notices);
-    }
 
-    // Show the form for creating a new academic detail.
+        // Modify the news data to prepend the base URL to image/file paths
+        $noticesWithUrl = $notices->map(function ($noticesItem) {
+            // 
+            if ($noticesItem->file_path) {
+                $noticesItem->file_path = asset('storage/' . $noticesItem->file_path);
+            }
+
+            // You can add similar transformations for other file fields if required
+
+            return $noticesItem;
+        });
+
+        return response()->json($noticesWithUrl);
+    }
     
 }

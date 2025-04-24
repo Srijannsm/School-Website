@@ -12,6 +12,7 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        //
-    ];
+    'gallery/store', // Exempt the gallery upload route from CSRF validation if needed
+];
+
 }

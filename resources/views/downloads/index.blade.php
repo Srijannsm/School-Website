@@ -6,11 +6,11 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">{{ __('News & Blogs') }}</h1>
+                    <h1 class="m-0">{{ __('Downloads') }}</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6 text-right">
-                    <a href="{{ route('news.create') }}" class="btn btn-primary">
-                        {{ __('Create News/Blogs') }}
+                    <a href="{{ route('downloads.create') }}" class="btn btn-primary">
+                        {{ __('Add Files') }}
                     </a>
                 </div><!-- /.col -->
             </div><!-- /.row -->
@@ -30,45 +30,36 @@
                         </div> --}}
                         <!-- /.card-header -->
                         <div class="card-body">
-                            @if ($news->isEmpty())
-                                <p>No news added yet.</p>
+                            @if ($downloads->isEmpty())
+                                <p>No files added yet.</p>
                             @else
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
-                                        <th scope="col">Title</th>
-                                        <th scope="col">Type</th>
-                                        <th scope="col">Description</th>
-                                        <th scope="col">Image</th>
-                                        <th scope="col">Action</th>
+                                        <th scope="col" style="width: 70%;">Title</th>
+                                        {{-- <th scope="col">File</th> --}}
+                                        <th scope="col" >Action</th>
                                     </tr>
                                 </thead>
-                                @foreach ($news as $new)
+                                @foreach ($downloads as $download)
                                     <tbody>
                                         <tr>
                                             <th scope="row">{{ $loop->iteration }}</th>
-                                            <td>{{ $new->title }}</td>
-                                            <td>{{ $new->type }}</td>
-                                            <td>{!! $new->description !!}</td>
+                                            <td style="font-weight: bold; color:rgba(69, 13, 238, 0.727)">{{ $download->title }}</td>
+                                            {{-- <td>{{ $download->file_path }}</td> --}}
                                             <td>
-                                                @if($new->image)
-                                                    <img src="{{ asset('storage/' . $new->image) }}" alt="Image" class="img-thumbnail" width="100">
-                                                @else
-                                                    <p>No Image</p>
-                                                @endif
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('news.edit', ['id' => $new->id]) }}"
+                                                <a href="{{ route('downloads.download', ['id' => $download->id]) }}" class="btn btn-primary">Download</a>
+                                                <a href="{{ route('downloads.edit', ['id' => $download->id]) }}"
                                                     class="btn btn-success pull-right" role="button">Edit
                                                 </a>
-                                                <a href="{{ route('news.destroy', ['id' => $new->id]) }}"
+                                                <a href="{{ route('downloads.destroy', ['id' => $download->id]) }}"
                                                     class="btn btn-danger pull-right" role="button">Remove
                                                 </a>
                                             </td>
                                         </tr>
                                     </tbody>
-                                @endforeach 
+                                @endforeach
                             </table>
                             @endif
                         </div>

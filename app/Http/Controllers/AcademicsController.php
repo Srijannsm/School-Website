@@ -20,6 +20,12 @@ class AcademicsController extends Controller
     {
         return view('academics.create');
     }
+    
+    public function show($slug)
+    {
+        $academics = Academics::where('slug', $slug)->firstOrFail();
+        return response()->json($academics);
+    }
 
     // Store a newly created academic detail in the database.
     public function store(Request $request)

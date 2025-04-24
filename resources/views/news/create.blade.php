@@ -22,7 +22,7 @@
                 <div class="col-lg-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Create news</h3>
+                            <h3 class="card-title">Create news/blog</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- Display validation errors as pop-ups -->
@@ -47,6 +47,14 @@
                                     <label for="name">Title:</label>
                                     <input type="text" class="form-control" id="title" name="title"
                                         placeholder="Enter Title" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Type:</label>
+                                    <select class="form-control" id="type" name="type" required>
+                                    <option value="" disabled selected>Select Type</option>
+                                    <option value="News">News</option>
+                                    <option value="Blog">Blog</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="image">Image:</label>

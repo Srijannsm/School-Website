@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
+use Carbon\Carbon; 
 
 class Gallery extends Model
 {
@@ -21,6 +23,8 @@ class Gallery extends Model
     // The attributes that are mass assignable.
     protected $fillable = [
         'title',
+        'slug',
+        'images',
         'image',
         'news_id',
         'notices_id',
@@ -28,8 +32,23 @@ class Gallery extends Model
 
     ];
     protected $casts = [
-        'image' => 'array', // Automatically convert JSON to array
+        'images' => 'array', // Automatically convert JSON to array
     ];
+    
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($images) {
+            $images->slug = Str::slug($images->title);
+        });
+    }
+    
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('m/d/Y');
+    }
+    
     public function photos()
     {
         return $this->hasMany(Gallery::class, 'news_id');

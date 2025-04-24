@@ -21,7 +21,7 @@
                 <div class="col-lg-12">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">News Editing</h3>
+                            <h3 class="card-title">News/Blog Editing</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
@@ -34,6 +34,15 @@
                                     <input type="text" class="form-control" id="title" name="title"
                                            value="{{ $news->title }}" required>
                                 </div>
+                                <div class="form-group">
+    <label for="name">Type:</label>
+    <select class="form-control" id="type" name="type" required>
+        <option value="" disabled>Select Type</option>
+        <option value="News" <?= (isset($type) && $type == 'News') ? 'selected' : '' ?>>News</option>
+        <option value="Blog" <?= (isset($type) && $type == 'Blog') ? 'selected' : '' ?>>Blog</option>
+    </select>
+</div>
+
                                 <div class="form-group">
                                     <label for="image">Upload New Image:</label>
                                     <input type="file" class="form-control-file" id="image" name="image" accept="image/*">

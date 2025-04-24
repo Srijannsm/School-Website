@@ -27,6 +27,7 @@ class NewsController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
@@ -37,6 +38,7 @@ class NewsController extends Controller
 
         News::create([
             'title' => $validatedData['title'],
+            'type' => $validatedData['type'],
             'description' => $validatedData['description'],
             'image' => $imagePath,
         ]);
@@ -44,11 +46,18 @@ class NewsController extends Controller
 
         return redirect()->route('news.index')->with('success', 'News details created successfully.');
     }
+    
+    public function show($slug)
+    {
+        $news = News::where('slug', $slug)->firstOrFail();
+        return response()->json($news);
+    }
 
     // Show the form for editing the specified news detail.
     public function edit($id)
     {
         $news = News::findOrFail($id);
+        // dd($news);
         return view('news.edit', compact('news'));
     }
 
@@ -57,6 +66,7 @@ class NewsController extends Controller
     {
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
@@ -77,6 +87,7 @@ class NewsController extends Controller
         // Update other news details
         $news->update([
             'title' => $validatedData['title'],
+            'type' => $validatedData['type'],
             'description' => $validatedData['description'],
             'image' => $news->image,
         ]);
@@ -85,17 +96,32 @@ class NewsController extends Controller
     }
 
     // Remove the specified news detail from the database.
-    public function destroy($id)
+    // public function destroy($id)
+    // {
+    //     // $dd($news);
+    //     $news = News::findOrFail($id);
+
+    //     // Delete image if it exists
+    //     if ($news->image) {
+    //         Storage::disk('public')->delete($news->image);
+    //     }
+
+    //     $news->delete();
+
+    //     return redirect()->route('news.index')->with('success', 'News details deleted successfully.');
+    // }
+     public function destroy($id)
     {
         $news = News::findOrFail($id);
 
-        // Delete image if it exists
+        // Delete the image file if it exists
         if ($news->image) {
             Storage::disk('public')->delete($news->image);
         }
 
+        // Delete the academic record
         $news->delete();
 
-        return redirect()->route('news.index')->with('success', 'News details deleted successfully.');
+        return redirect()->route('news.index')->with('success', 'News/Blog details deleted successfully.');
     }
 }

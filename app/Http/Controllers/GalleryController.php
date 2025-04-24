@@ -25,45 +25,54 @@ class GalleryController extends Controller
         return view('gallery.create');
     }
 
+    public function show($slug)
+    {
+        $images = Gallery::where('slug', $slug)->firstOrFail();
+        return response()->json($images);
+    }
+    
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        // Validate the request
-        $validatedData = $request->validate([
-            'title' => 'required|string|max:255',
-            'images' => 'required',
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
-        ]);
-    
-        $imagePaths = [];
-    
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $image) {
-                $imagePaths[] = $image->store('images', 'public');
-            }
+    \Log::info($request->all()); // Debugging: Log incoming request
+
+    $imagePaths = [];
+
+    if ($request->hasFile('images')) {
+        foreach ($request->file('images') as $image) {
+            // Save each image in the storage folder
+            $imagePaths[] = $image->store('images', 'public');
         }
-    
-        // Save academic details
-        Gallery::create([
-            'title' => $validatedData['title'],
-            'image' => json_encode($imagePaths), // Store multiple images as JSON
-        ]);
-    
-        return redirect()->route('gallery.index')->with('success', 'Academics details created successfully.');
     }
-    
+
+    // Handle single 'image' upload
+    $imagePath = null;
+    if ($request->hasFile('image')) {
+        $imagePath = $request->file('image')->store('thumbnail', 'public');
+    }
+
+    // Save to database
+    $gallery = Gallery::create([
+        'title' => $request->title ?? 'Untitled',
+        'images' => json_encode($imagePaths), // Store multiple image paths as JSON
+        'image' => $imagePath, // This ensures 'image' is stored even if it's null
+    ]);
+
+    return response()->json([
+        'success' => 'Images uploaded successfully!',
+        'redirect' => route('gallery.index')
+    ]);
+
+        return response()->json(['error' => 'No images uploaded.'], 400);
+    }
+
 
 
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+     
 
     /**
      * Show the form for editing the specified resource.
@@ -85,12 +94,31 @@ class GalleryController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id)
-    {
-        $image = Gallery::findOrFail($id);
+{
+    // Find the gallery record
+    $gallery = Gallery::findOrFail($id);
 
-        // Delete the image record
-        $image->delete();
+    // Decode the JSON to get the multiple image paths
+    $imagePaths = json_decode($gallery->images, true) ?? [];
 
-        return redirect()->route('gallery.index')->with('success', 'image details deleted successfully.');
+    // Loop through each image path and delete the image file
+    foreach ($imagePaths as $imagePath) {
+        if (Storage::disk('public')->exists($imagePath)) {
+            Storage::disk('public')->delete($imagePath);
+        }
     }
+
+    // Delete the single thumbnail image if it exists
+    if (!empty($gallery->image) && Storage::disk('public')->exists($gallery->image)) {
+        Storage::disk('public')->delete($gallery->image);
+    }
+
+    // Delete the record from the database
+    $gallery->delete();
+
+    // Redirect back with success message
+    return redirect()->route('gallery.index')->with('success', 'Gallery images, thumbnail, and records deleted successfully.');
+}
+
+
 }

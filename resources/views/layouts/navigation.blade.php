@@ -19,12 +19,12 @@
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
             <!-- Dashboard Link -->
-            <li class="nav-item">
-                <a href="{{ route('home') }}" class="nav-link sidebar-link">
-                    <i class="nav-icon fas fa-th"></i>
-                    <p>{{ __('Dashboard') }}</p>
-                </a>
-            </li>
+            <!--<li class="nav-item">-->
+            <!--    <a href="{{ route('home') }}" class="nav-link sidebar-link">-->
+            <!--        <i class="nav-icon fas fa-th"></i>-->
+            <!--        <p>{{ __('Dashboard') }}</p>-->
+            <!--    </a>-->
+            <!--</li>-->
 
             <!-- Academics Link -->
             <li class="nav-item">
@@ -62,7 +62,7 @@
             <li class="nav-item">
                 <a href="{{ route('news.index') }}" class="nav-link sidebar-link">
                     <i class="nav-icon fas fa-newspaper"></i>
-                    <p>{{ __('News') }}</p>
+                    <p>{{ __('News & Blog') }}</p>
                 </a>
             </li>
             <!--Notices Link -->
@@ -72,12 +72,20 @@
                     <p>{{ __('Notices') }}</p>
                 </a>
             </li>
-
+            
+            <!--Downloads Link -->
+            <li class="nav-item">
+                <a href="{{ route('downloads.index') }}" class="nav-link sidebar-link">
+                    <i class="nav-icon fas fa-solid fa-download"></i>
+                    <p>{{ __('Downloads') }}</p>
+                </a>
+            </li>
+            
             <!-- Settings Link -->
             <li class="nav-item">
                 <a href="{{ route('school_details.index') }}" class="nav-link sidebar-link">
                     <i class="nav-icon fas fa-solid fa-gear"></i>
-                    <p>{{ __('School Setting') }}</p>
+                    <p>{{ __('Settings') }}</p>
                 </a>
             </li>
 

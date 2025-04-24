@@ -4,14 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
-class Academics extends Model
+class Downloads extends Model
 {
     use HasFactory;
 
     // The table associated with the model.
-    protected $table = 'academics';
+    protected $table = 'downloads';
 
     // The primary key for the table
     protected $primaryKey = 'id';
@@ -22,18 +21,18 @@ class Academics extends Model
     // The attributes that are mass assignable.
     protected $fillable = [
         'title',
-        'slug',
-        'description',
-        'image',
+        'file_path',
         
     ];
-    
-    public static function boot()
-    {
-        parent::boot();
 
-        static::creating(function ($academics) {
-            $academics->slug = Str::slug($academics->title);
-        });
+    // Optionally, you can cast the created_at and updated_at fields to a specific format
+    public function getCreatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('m/d/Y');
+    }
+
+    public function getUpdatedAtAttribute($value)
+    {
+        return \Carbon\Carbon::parse($value)->format('m/d/Y');
     }
 }

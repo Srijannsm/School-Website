@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str; // ✅ Import Str
+use Carbon\Carbon; // ✅ Import Carbon for date formatting
 
 class News extends Model
 {
@@ -23,19 +25,31 @@ class News extends Model
     // The attributes that are mass assignable.
     protected $fillable = [
         'title',
+        'slug',
+        'type',
         'description',
-        'image',
-        
+        'image'
     ];
-    
-    // Optionally, you can cast the created_at and updated_at fields to a specific format
-    public function getCreatedAtAttribute($value)
+
+    // Automatically generate slug when creating a new news article
+    public static function boot()
     {
-        return \Carbon\Carbon::parse($value)->format('m/d/Y');
+        parent::boot();
+
+        static::creating(function ($news) {
+            $news->slug = Str::slug($news->title);
+        });
     }
 
+    // Format created_at field
+    public function getCreatedAtAttribute($value)
+    {
+        return Carbon::parse($value)->format('m/d/Y');
+    }
+
+    // Format updated_at field
     public function getUpdatedAtAttribute($value)
     {
-        return \Carbon\Carbon::parse($value)->format('m/d/Y');
+        return Carbon::parse($value)->format('m/d/Y');
     }
 }
